@@ -3,282 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestor Académico</title>
-    <style>
-        /* --- Paleta de Colores y Variables --- */
-        :root {
-            --bg-main: #1a1a21;
-            --bg-card: #252530;
-            --text-light: #ffffff;
-            --text-muted: #8a8a9e;
-            --accent-purple: #b370ff;
-            --grade-high: #2ecc71;  /* Verde */
-            --grade-medium: #f1c40f; /* Amarillo */
-            --grade-low: #e67e22;  /* Naranja */
-            --grade-none: #3b3b4a; /* Gris */
-        }
-
-        /* --- Estilos Generales --- */
-        body {
-            margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-light);
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
-
-        /* --- Menú Lateral (Sidebar) --- */
-        .sidebar {
-            width: 260px;
-            background-color: var(--bg-main);
-            display: flex;
-            flex-direction: column;
-            border-right: 1px solid #2c2c38;
-            padding: 20px 0;
-        }
-
-        .brand {
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            margin-bottom: 30px;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-
-        .brand img {
-            width: 30px;
-            margin-right: 15px;
-        }
-
-        .nav-btn {
-            background: none;
-            color: var(--text-light);
-            border: none;
-            padding: 15px 25px;
-            text-align: left;
-            font-size: 1.1rem;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .nav-btn:hover {
-            background-color: rgba(255,255,255,0.05);
-        }
-
-        .nav-btn.activo {
-            background-color: #2c2c3b;
-            border-radius: 0 25px 25px 0;
-            margin-right: 15px;
-            color: var(--accent-purple);
-        }
-
-        /* --- Área Principal --- */
-        .content {
-            flex-grow: 1;
-            padding: 30px 40px;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        .header-title {
-            font-size: 1.8rem;
-            margin-top: 0;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        /* --- Tarjetas (Cards) --- */
-        .card {
-            background-color: var(--bg-card);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 1.2rem;
-            margin-bottom: 20px;
-        }
-
-        /* --- Lista de Calificaciones --- */
-        .grade-item {
-            display: flex;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .grade-item:last-child {
-            border-bottom: none;
-        }
-
-        /* --- Círculos Dinámicos de Notas --- */
-        .grade-circle {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 1.2rem;
-            font-weight: 500;
-            margin-right: 20px;
-            border: 3px solid var(--grade-none); /* Color por defecto */
-            background-color: rgba(0,0,0,0.2);
-        }
-
-        /* Clases de colores que se asignan por JS */
-        .color-high { border-color: var(--grade-high); }
-        .color-medium { border-color: var(--grade-medium); }
-        .color-low { border-color: var(--grade-low); }
-        .color-none { border-color: var(--grade-none); color: var(--text-muted); }
-
-        .grade-details {
-            flex-grow: 1;
-        }
-
-        .grade-title {
-            font-size: 1.1rem;
-            margin-bottom: 5px;
-        }
-
-        .grade-weight {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        /* --- Botón Flotante (FAB) --- */
-        .fab {
-            position: fixed;
-            bottom: 40px;
-            right: 40px;
-            width: 60px;
-            height: 60px;
-            background-color: var(--accent-purple);
-            color: white;
-            border: none;
-            border-radius: 18px;
-            font-size: 2rem;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(179, 112, 255, 0.4);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: transform 0.2s;
-        }
-
-        .fab:hover {
-            transform: scale(1.05);
-        }
-    </style>
+    <title>Registro Académico</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <!-- Menú Lateral -->
     <div class="sidebar">
-        <div class="brand">
-            <!-- Simulación de ícono -->
-            <div style="width: 30px; height: 30px; background: var(--accent-purple); border-radius: 8px; margin-right: 10px;"></div>
-            Grader
-        </div>
-        <button class="nav-btn">Asignaturas</button>
-        <button class="nav-btn activo">Calificaciones</button>
-        <button class="nav-btn">Registros Académicos</button>
-        <button class="nav-btn">Ajustes</button>
+        <button class="nav-btn" onclick="cambiarPestana('registro-academico')">Registro Académico</button>
+        <button class="nav-btn" onclick="cambiarPestana('resumen')">Resumen</button>
+        <button class="nav-btn" onclick="cambiarPestana('configuracion')">Configuración</button>
     </div>
 
-    <!-- Contenido Principal -->
-    <div class="content">
-        <h2 class="header-title">Algoritmos y estructura de datos</h2>
-
-        <!-- Tarjeta de Promedio (Resumen) -->
-        <div class="card">
-            <div class="card-header">
-                <span style="color: var(--accent-purple);">⏱</span> Promedio
-            </div>
-            <div style="display: flex; align-items: center;">
-                <div class="grade-circle color-high" style="width: 70px; height: 70px; font-size: 1.8rem; border-width: 5px;">
-                    12
-                </div>
-                <div>
-                    <div style="color: var(--grade-high); margin-bottom: 5px;">12 Ptos. Acumulados</div>
-                    <div style="color: #3498db; margin-bottom: 5px;">0 Ptos. Por Evaluar</div>
-                    <div style="color: var(--text-muted);">7 Peso</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Tarjeta de Lista de Evaluaciones -->
-        <div class="card">
-            <div class="card-header">
-                <span style="color: var(--accent-purple);">📋</span> Calificaciones <span style="color: var(--text-muted); font-size: 0.9rem; margin-left: 10px;">100%</span>
-            </div>
-            
-            <div id="lista-calificaciones">
-                <!-- Los items se generarán dinámicamente con JavaScript -->
-            </div>
-        </div>
-
-        <!-- Botón Flotante -->
-        <button class="fab">+</button>
-    </div>
-
-    <!-- Lógica Dinámica de Notas -->
-    <script>
-        // 1. Simulación de los datos de la asignatura (como un array de objetos)
-        const evaluaciones = [
-            { titulo: "Quiz 1", peso: "5%", nota: 20 },
-            { titulo: "Taller 1", peso: "5%", nota: 10 },
-            { titulo: "Parcial 1", peso: "20%", nota: 0 },
-            { titulo: "Entrega proyecto etapa 1", peso: "20%", nota: 15 },
-            { titulo: "Quiz 2", peso: "5%", nota: null }, // Null representa "por evaluar" (como el "--" o los espacios vacíos)
-            { titulo: "Parcial 2", peso: "20%", nota: 9 }
-        ];
-
-        // 2. Función para determinar la clase CSS según el valor de la nota
-        function obtenerClaseColor(nota) {
-            if (nota === null) return "color-none"; // Sin evaluar
-            if (nota >= 14) return "color-high";    // Verde (Nota alta)
-            if (nota >= 10) return "color-medium";  // Amarillo (Nota media)
-            return "color-low";                     // Naranja/Rojo (Nota baja)
-        }
-
-        // 3. Generar la vista HTML dinámicamente
-        const contenedorLista = document.getElementById('lista-calificaciones');
+    <!-- Área de Contenido -->
+    <div class="main-content">
         
-        evaluaciones.forEach(eval => {
-            // Determinar si mostramos un número o un guion "--"
-            let textoNota = eval.nota !== null ? eval.nota : "--";
-            let claseColor = obtenerClaseColor(eval.nota);
+        <!-- Pestaña: Registro Académico -->
+        <div id="registro-academico" class="pestana active">
+            <h2>Registro Académico</h2>
+            <p>Aquí se visualizarán tus semestres y materias...</p>
+        </div>
 
-            // Crear el bloque HTML para cada item
-            let itemHTML = `
-                <div class="grade-item">
-                    <div class="grade-circle ${claseColor}">
-                        ${textoNota}
-                    </div>
-                    <div class="grade-details">
-                        <div class="grade-title">${eval.titulo}</div>
-                        <div class="grade-weight">${eval.peso}</div>
-                    </div>
-                </div>
-            `;
-            
-            // Insertar en el contenedor
-            contenedorLista.innerHTML += itemHTML;
-        });
-    </script>
+        <!-- Pestaña: Resumen -->
+        <div id="resumen" class="pestana">
+            <h2>Resumen</h2>
+            <p>Aquí verás tus promedios e historial...</p>
+        </div>
+
+        <!-- Pestaña: Configuración -->
+        <div id="configuracion" class="pestana">
+            <h2>Configuración</h2>
+            <p>Opciones de la cuenta y la página...</p>
+        </div>
+
+        <!-- Botón flotante de suma (+) -->
+        <button class="fab-btn" onclick="abrirModal()">+</button>
+    </div>
+
+    <!-- Modal para agregar registros (Oculto por defecto) -->
+    <div id="modal-agregar" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="cerrarModal()">&times;</span>
+            <h3>¿Qué deseas agregar?</h3>
+            <button class="opcion-btn">Agregar Semestre</button>
+            <button class="opcion-btn">Agregar Materia</button>
+            <button class="opcion-btn">Agregar Evaluación</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
