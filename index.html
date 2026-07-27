@@ -3,413 +3,282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grader Estelar - UCAB</title>
+    <title>Gestor Académico</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Quicksand:wght@400;600&display=swap');
-
-        * { box-sizing: border-box; }
-        
-        body { 
-            font-family: 'Quicksand', sans-serif; 
-            /* Fondo inspirado en el cielo nocturno de la Princesa Luna */
-            background: radial-gradient(circle at top right, #1b0e33, #0a0a1a, #050b14);
-            background-attachment: fixed;
-            margin: 0; 
-            padding: 20px; 
-            color: #e0e6ed;
+        /* --- Paleta de Colores y Variables --- */
+        :root {
+            --bg-main: #1a1a21;
+            --bg-card: #252530;
+            --text-light: #ffffff;
+            --text-muted: #8a8a9e;
+            --accent-purple: #b370ff;
+            --grade-high: #2ecc71;  /* Verde */
+            --grade-medium: #f1c40f; /* Amarillo */
+            --grade-low: #e67e22;  /* Naranja */
+            --grade-none: #3b3b4a; /* Gris */
         }
 
-        .container { 
-            max-width: 900px; 
-            margin: auto; 
-        }
-
-        h1, h2, h3 { font-family: 'Cinzel', serif; margin: 0; }
-        
-        .header-title {
-            text-align: center; 
-            color: #d8caff; 
-            text-shadow: 0 0 15px rgba(138, 43, 226, 0.6);
-            margin-bottom: 10px;
-            font-size: 2.5em;
-        }
-
-        .global-gpa {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(138, 43, 226, 0.3);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 0 20px rgba(72, 61, 139, 0.4);
-            backdrop-filter: blur(5px);
-        }
-
-        .global-gpa h2 { color: #00ffff; text-shadow: 0 0 10px rgba(0, 255, 255, 0.4); font-size: 2em; }
-
-        .btn { 
-            padding: 10px 15px; 
-            border: none; 
-            border-radius: 8px; 
-            cursor: pointer; 
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-size: 0.9em;
-        }
-        
-        .btn-add-sem { 
-            background: linear-gradient(45deg, #483d8b, #2f4f4f); 
-            color: #fff; 
-            width: 100%; 
-            font-size: 1.1em; 
-            margin-bottom: 30px; 
-            box-shadow: 0 4px 10px rgba(72, 61, 139, 0.5);
-        }
-        .btn-add-sem:hover { background: linear-gradient(45deg, #5a4baf, #3b6363); transform: translateY(-2px); }
-        
-        .btn-add-sub { background: rgba(72, 61, 139, 0.6); color: #fff; border: 1px solid #7b68ee; margin-top: 15px;}
-        .btn-add-sub:hover { background: rgba(72, 61, 139, 0.9); }
-        
-        .btn-add-eval { background: rgba(0, 206, 209, 0.2); color: #00ffff; border: 1px solid #00ffff; margin-bottom: 15px; }
-        .btn-add-eval:hover { background: rgba(0, 206, 209, 0.4); }
-        
-        .btn-danger { background: rgba(220, 20, 60, 0.6); color: #fff; padding: 6px 10px; border: 1px solid #dc143c; }
-        .btn-danger:hover { background: rgba(220, 20, 60, 0.9); box-shadow: 0 0 10px rgba(220, 20, 60, 0.5); }
-
-        input {
-            font-family: 'Quicksand', sans-serif;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid #483d8b;
-            color: #e0e6ed;
-            border-radius: 6px;
-            padding: 8px;
-            transition: border 0.3s;
-        }
-        input:focus { outline: none; border-color: #00ffff; box-shadow: 0 0 8px rgba(0, 255, 255, 0.3); }
-
-        /* Estilos de Semestre */
-        .semester-block {
-            background: rgba(15, 15, 30, 0.7);
-            border-left: 4px solid #7b68ee;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 30px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
-        }
-        
-        .semester-header {
+        /* --- Estilos Generales --- */
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-light);
             display: flex;
-            justify-content: space-between;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Menú Lateral (Sidebar) --- */
+        .sidebar {
+            width: 260px;
+            background-color: var(--bg-main);
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid #2c2c38;
+            padding: 20px 0;
+        }
+
+        .brand {
+            display: flex;
             align-items: center;
-            border-bottom: 1px solid rgba(123, 104, 238, 0.3);
-            padding-bottom: 15px;
+            padding: 0 20px;
+            margin-bottom: 30px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .brand img {
+            width: 30px;
+            margin-right: 15px;
+        }
+
+        .nav-btn {
+            background: none;
+            color: var(--text-light);
+            border: none;
+            padding: 15px 25px;
+            text-align: left;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .nav-btn:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+
+        .nav-btn.activo {
+            background-color: #2c2c3b;
+            border-radius: 0 25px 25px 0;
+            margin-right: 15px;
+            color: var(--accent-purple);
+        }
+
+        /* --- Área Principal --- */
+        .content {
+            flex-grow: 1;
+            padding: 30px 40px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .header-title {
+            font-size: 1.8rem;
+            margin-top: 0;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* --- Tarjetas (Cards) --- */
+        .card {
+            background-color: var(--bg-card);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
             margin-bottom: 20px;
         }
-        
-        .semester-header input {
-            font-family: 'Cinzel', serif;
-            font-size: 1.5em;
-            font-weight: bold;
-            color: #b39ddb;
-            background: transparent;
-            border: none;
-            width: 50%;
-        }
-        .semester-header input:focus { border-bottom: 1px solid #00ffff; }
 
-        .semester-gpa {
-            font-size: 1.2em;
-            color: #40e0d0;
-            text-shadow: 0 0 5px rgba(64, 224, 208, 0.4);
-        }
-
-        /* Estilos de Materia */
-        .subject-card { 
-            background: rgba(255, 255, 255, 0.03); 
-            padding: 20px; 
-            margin-bottom: 20px; 
-            border-radius: 10px; 
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .subject-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 15px; 
-        }
-        
-        .subject-header input { 
-            font-size: 1.2em; 
-            font-weight: 600; 
-            width: 60%; 
-            border: none;
-            background: transparent;
-            color: #fff;
-        }
-        .subject-header input:focus { border-bottom: 1px solid #7b68ee; }
-        
-        .eval-row { 
-            display: flex; 
-            gap: 10px; 
-            margin-bottom: 10px; 
-            align-items: center; 
-            flex-wrap: wrap;
-        }
-        .eval-row input { flex: 1; min-width: 100px; }
-        
-        /* Barra de progreso estética */
-        .progress-container {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            height: 12px;
-            margin-top: 15px;
-            overflow: hidden;
-            border: 1px solid rgba(123, 104, 238, 0.3);
-        }
-        .progress-fill {
-            height: 100%;
-            border-radius: 10px;
-            background: linear-gradient(90deg, #7b68ee, #00ffff);
-            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-            transition: width 0.4s ease, background 0.4s ease;
-        }
-        .progress-fill.over { background: linear-gradient(90deg, #ff4500, #dc143c); box-shadow: 0 0 10px rgba(220, 20, 60, 0.5); }
-        .progress-fill.complete { background: linear-gradient(90deg, #32cd32, #00fa9a); box-shadow: 0 0 10px rgba(0, 250, 154, 0.5); }
-
-        .summary { 
-            margin-top: 15px; 
+        /* --- Lista de Calificaciones --- */
+        .grade-item {
             display: flex;
-            justify-content: space-between;
-            font-size: 1.05em; 
-            color: #a9a9a9;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        
-        .grade-good { color: #00fa9a; text-shadow: 0 0 5px rgba(0, 250, 154, 0.4); }
-        .grade-warning { color: #ffd700; }
-        .grade-danger { color: #ff4500; }
 
-        @media (max-width: 700px) {
-            .eval-row { flex-direction: column; align-items: stretch; }
-            .semester-header { flex-direction: column; align-items: flex-start; gap: 10px; }
-            .semester-header input { width: 100%; }
-            .summary { flex-direction: column; gap: 8px; }
+        .grade-item:last-child {
+            border-bottom: none;
+        }
+
+        /* --- Círculos Dinámicos de Notas --- */
+        .grade-circle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-right: 20px;
+            border: 3px solid var(--grade-none); /* Color por defecto */
+            background-color: rgba(0,0,0,0.2);
+        }
+
+        /* Clases de colores que se asignan por JS */
+        .color-high { border-color: var(--grade-high); }
+        .color-medium { border-color: var(--grade-medium); }
+        .color-low { border-color: var(--grade-low); }
+        .color-none { border-color: var(--grade-none); color: var(--text-muted); }
+
+        .grade-details {
+            flex-grow: 1;
+        }
+
+        .grade-title {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .grade-weight {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        /* --- Botón Flotante (FAB) --- */
+        .fab {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--accent-purple);
+            color: white;
+            border: none;
+            border-radius: 18px;
+            font-size: 2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(179, 112, 255, 0.4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: transform 0.2s;
+        }
+
+        .fab:hover {
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 class="header-title">🌙 Grader Estelar ✨</h1>
-        
-        <div class="global-gpa">
-            <h3>Promedio General Acumulado</h3>
-            <h2 id="globalGpaDisplay">0.00 / 20</h2>
-        </div>
 
-        <button class="btn btn-add-sem" onclick="addSemester()">+ Nuevo Semestre Cósmico</button>
-        <div id="semestersContainer"></div>
+    <!-- Menú Lateral -->
+    <div class="sidebar">
+        <div class="brand">
+            <!-- Simulación de ícono -->
+            <div style="width: 30px; height: 30px; background: var(--accent-purple); border-radius: 8px; margin-right: 10px;"></div>
+            Grader
+        </div>
+        <button class="nav-btn">Asignaturas</button>
+        <button class="nav-btn activo">Calificaciones</button>
+        <button class="nav-btn">Registros Académicos</button>
+        <button class="nav-btn">Ajustes</button>
     </div>
 
+    <!-- Contenido Principal -->
+    <div class="content">
+        <h2 class="header-title">Algoritmos y estructura de datos</h2>
+
+        <!-- Tarjeta de Promedio (Resumen) -->
+        <div class="card">
+            <div class="card-header">
+                <span style="color: var(--accent-purple);">⏱</span> Promedio
+            </div>
+            <div style="display: flex; align-items: center;">
+                <div class="grade-circle color-high" style="width: 70px; height: 70px; font-size: 1.8rem; border-width: 5px;">
+                    12
+                </div>
+                <div>
+                    <div style="color: var(--grade-high); margin-bottom: 5px;">12 Ptos. Acumulados</div>
+                    <div style="color: #3498db; margin-bottom: 5px;">0 Ptos. Por Evaluar</div>
+                    <div style="color: var(--text-muted);">7 Peso</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tarjeta de Lista de Evaluaciones -->
+        <div class="card">
+            <div class="card-header">
+                <span style="color: var(--accent-purple);">📋</span> Calificaciones <span style="color: var(--text-muted); font-size: 0.9rem; margin-left: 10px;">100%</span>
+            </div>
+            
+            <div id="lista-calificaciones">
+                <!-- Los items se generarán dinámicamente con JavaScript -->
+            </div>
+        </div>
+
+        <!-- Botón Flotante -->
+        <button class="fab">+</button>
+    </div>
+
+    <!-- Lógica Dinámica de Notas -->
     <script>
-        // Estructura anidada: Semestres -> Materias -> Evaluaciones
-        let graderData = JSON.parse(localStorage.getItem('lunaGrader_Data')) || [
-            {
-                id: Date.now(),
-                name: 'Semestre 1',
-                subjects: [
-                    {
-                        id: Date.now() + 1,
-                        name: 'Introducción a las telecomunicaciones',
-                        evals: []
-                    }
-                ]
-            }
+        // 1. Simulación de los datos de la asignatura (como un array de objetos)
+        const evaluaciones = [
+            { titulo: "Quiz 1", peso: "5%", nota: 20 },
+            { titulo: "Taller 1", peso: "5%", nota: 10 },
+            { titulo: "Parcial 1", peso: "20%", nota: 0 },
+            { titulo: "Entrega proyecto etapa 1", peso: "20%", nota: 15 },
+            { titulo: "Quiz 2", peso: "5%", nota: null }, // Null representa "por evaluar" (como el "--" o los espacios vacíos)
+            { titulo: "Parcial 2", peso: "20%", nota: 9 }
         ];
 
-        function saveData() {
-            localStorage.setItem('lunaGrader_Data', JSON.stringify(graderData));
-            render();
+        // 2. Función para determinar la clase CSS según el valor de la nota
+        function obtenerClaseColor(nota) {
+            if (nota === null) return "color-none"; // Sin evaluar
+            if (nota >= 14) return "color-high";    // Verde (Nota alta)
+            if (nota >= 10) return "color-medium";  // Amarillo (Nota media)
+            return "color-low";                     // Naranja/Rojo (Nota baja)
         }
 
-        // --- CRUD SEMESTRES ---
-        function addSemester() {
-            graderData.push({ id: Date.now(), name: 'Nuevo Semestre', subjects: [] });
-            saveData();
-        }
+        // 3. Generar la vista HTML dinámicamente
+        const contenedorLista = document.getElementById('lista-calificaciones');
+        
+        evaluaciones.forEach(eval => {
+            // Determinar si mostramos un número o un guion "--"
+            let textoNota = eval.nota !== null ? eval.nota : "--";
+            let claseColor = obtenerClaseColor(eval.nota);
 
-        function deleteSemester(semId) {
-            if(confirm("🌙 ¿Deseas desvanecer este semestre y todas sus estrellas (materias)?")) {
-                graderData = graderData.filter(s => s.id !== semId);
-                saveData();
-            }
-        }
-
-        function updateSemesterName(semId, newName) {
-            const sem = graderData.find(s => s.id === semId);
-            if(sem) sem.name = newName;
-            saveData();
-        }
-
-        // --- CRUD MATERIAS ---
-        function addSubject(semId) {
-            const sem = graderData.find(s => s.id === semId);
-            if(sem) {
-                sem.subjects.push({ id: Date.now(), name: 'Nueva Materia', evals: [] });
-                saveData();
-            }
-        }
-
-        function deleteSubject(semId, subId) {
-            if(confirm("✨ ¿Seguro que deseas eliminar esta materia?")) {
-                const sem = graderData.find(s => s.id === semId);
-                if(sem) sem.subjects = sem.subjects.filter(sub => sub.id !== subId);
-                saveData();
-            }
-        }
-
-        function updateSubjectName(semId, subId, newName) {
-            const sem = graderData.find(s => s.id === semId);
-            if(sem) {
-                const sub = sem.subjects.find(s => s.id === subId);
-                if(sub) sub.name = newName;
-            }
-            saveData();
-        }
-
-        // --- CRUD EVALUACIONES ---
-        function addEval(semId, subId) {
-            const sem = graderData.find(s => s.id === semId);
-            if(sem) {
-                const sub = sem.subjects.find(s => s.id === subId);
-                if(sub) sub.evals.push({ id: Date.now(), name: 'Evaluación', weight: 0, grade: 0 });
-            }
-            saveData();
-        }
-
-        function updateEval(semId, subId, evalId, field, value) {
-            const sem = graderData.find(s => s.id === semId);
-            if(sem) {
-                const sub = sem.subjects.find(s => s.id === subId);
-                if(sub) {
-                    const ev = sub.evals.find(e => e.id === evalId);
-                    if(ev) ev[field] = field === 'name' ? value : parseFloat(value) || 0;
-                }
-            }
-            saveData();
-        }
-
-        function deleteEval(semId, subId, evalId) {
-            const sem = graderData.find(s => s.id === semId);
-            if(sem) {
-                const sub = sem.subjects.find(s => s.id === subId);
-                if(sub) sub.evals = sub.evals.filter(e => e.id !== evalId);
-            }
-            saveData();
-        }
-
-        // --- RENDERIZADO Y CÁLCULOS ---
-        function render() {
-            const container = document.getElementById('semestersContainer');
-            container.innerHTML = '';
-
-            let globalTotalGrades = 0;
-            let globalSubjectCount = 0;
-
-            if (graderData.length === 0) {
-                container.innerHTML = '<p style="text-align:center; color:#7b68ee;">El cielo nocturno está vacío. Agrega un semestre para comenzar.</p>';
-            }
-
-            graderData.forEach(sem => {
-                const semBlock = document.createElement('div');
-                semBlock.className = 'semester-block';
-                
-                let semTotalGrades = 0;
-                let semSubjectCount = sem.subjects.length;
-
-                let subjectsHtml = '';
-
-                sem.subjects.forEach(sub => {
-                    let totalGrade = 0;
-                    let totalWeight = 0;
-
-                    let evalsHtml = sub.evals.map(ev => {
-                        let calcGrade = (ev.grade * (ev.weight / 100));
-                        totalGrade += calcGrade;
-                        totalWeight += ev.weight;
-                        
-                        return `
-                            <div class="eval-row">
-                                <input type="text" value="${ev.name}" onchange="updateEval(${sem.id}, ${sub.id}, ${ev.id}, 'name', this.value)">
-                                <input type="number" value="${ev.weight}" onchange="updateEval(${sem.id}, ${sub.id}, ${ev.id}, 'weight', this.value)" placeholder="Peso %" min="0" max="100">
-                                <input type="number" value="${ev.grade}" onchange="updateEval(${sem.id}, ${sub.id}, ${ev.id}, 'grade', this.value)" placeholder="Nota (0-20)" step="0.1" min="0" max="20">
-                                <button class="btn btn-danger" onclick="deleteEval(${sem.id}, ${sub.id}, ${ev.id})">✖</button>
-                            </div>
-                        `;
-                    }).join('');
-
-                    semTotalGrades += totalGrade;
-                    globalTotalGrades += totalGrade;
-                    globalSubjectCount++;
-
-                    // Logica visual de la barra
-                    let barClass = 'progress-fill';
-                    if (totalWeight > 100) barClass += ' over';
-                    else if (totalWeight === 100) barClass += ' complete';
-                    
-                    let gradeClass = totalGrade >= 9.5 ? 'grade-good' : (totalGrade >= 5 ? 'grade-warning' : 'grade-danger');
-
-                    subjectsHtml += `
-                        <div class="subject-card">
-                            <div class="subject-header">
-                                <input type="text" value="${sub.name}" onchange="updateSubjectName(${sem.id}, ${sub.id}, this.value)">
-                                <button class="btn btn-danger" onclick="deleteSubject(${sem.id}, ${sub.id})">Eliminar Materia</button>
-                            </div>
-                            <button class="btn btn-add-eval" onclick="addEval(${sem.id}, ${sub.id})">+ Añadir Evaluación</button>
-                            
-                            <div class="evals-container">
-                                ${evalsHtml}
-                            </div>
-                            
-                            <div class="progress-container" title="Porcentaje evaluado: ${totalWeight.toFixed(1)}%">
-                                <div class="${barClass}" style="width: ${Math.min(totalWeight, 100)}%;"></div>
-                            </div>
-                            
-                            <div class="summary">
-                                <span>Progreso: <span style="color: ${totalWeight > 100 ? '#ff4500' : '#fff'}">${totalWeight.toFixed(1)}% / 100%</span></span>
-                                <span>Nota Acumulada: <strong class="${gradeClass}">${totalGrade.toFixed(2)} / 20</strong></span>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                // Calculo del promedio del semestre (suma de definitivas / cant de materias)
-                let semGpa = semSubjectCount > 0 ? (semTotalGrades / semSubjectCount) : 0;
-
-                semBlock.innerHTML = `
-                    <div class="semester-header">
-                        <input type="text" value="${sem.name}" onchange="updateSemesterName(${sem.id}, this.value)">
-                        <div class="semester-gpa">Promedio Semestre: <strong>${semGpa.toFixed(2)}</strong></div>
-                        <button class="btn btn-danger" onclick="deleteSemester(${sem.id})">Eliminar Semestre</button>
+            // Crear el bloque HTML para cada item
+            let itemHTML = `
+                <div class="grade-item">
+                    <div class="grade-circle ${claseColor}">
+                        ${textoNota}
                     </div>
-                    ${subjectsHtml}
-                    <button class="btn btn-add-sub" onclick="addSubject(${sem.id})">+ Agregar Materia a este Semestre</button>
-                `;
-                container.appendChild(semBlock);
-            });
-
-            // Calculo del promedio global general
-            let globalGpa = globalSubjectCount > 0 ? (globalTotalGrades / globalSubjectCount) : 0;
-            document.getElementById('globalGpaDisplay').innerText = `${globalGpa.toFixed(2)} / 20`;
-        }
-
-        // Render inicial
-        render();
+                    <div class="grade-details">
+                        <div class="grade-title">${eval.titulo}</div>
+                        <div class="grade-weight">${eval.peso}</div>
+                    </div>
+                </div>
+            `;
+            
+            // Insertar en el contenedor
+            contenedorLista.innerHTML += itemHTML;
+        });
     </script>
 </body>
 </html>
