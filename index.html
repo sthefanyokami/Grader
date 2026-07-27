@@ -3,419 +3,413 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nougat32 - Firmware & Utility Tool</title>
+    <title>Grader Estelar - UCAB</title>
     <style>
-        :root {
-            --bg-color: #2b2b2b;
-            --panel-bg: #3c3f41;
-            --border-color: #555555;
-            --text-color: #a9b7c6;
-            --text-bright: #ffffff;
-            --accent-color: #4a90e2;
-            --accent-hover: #357abd;
-            --danger-color: #d9534f;
-            --console-bg: #1e1e1e;
-            --console-text: #00ff66;
+        @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Quicksand:wght@400;600&display=swap');
+
+        * { box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Quicksand', sans-serif; 
+            /* Fondo inspirado en el cielo nocturno de la Princesa Luna */
+            background: radial-gradient(circle at top right, #1b0e33, #0a0a1a, #050b14);
+            background-attachment: fixed;
+            margin: 0; 
+            padding: 20px; 
+            color: #e0e6ed;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            font-size: 13px;
+        .container { 
+            max-width: 900px; 
+            margin: auto; 
         }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
+        h1, h2, h3 { font-family: 'Cinzel', serif; margin: 0; }
+        
+        .header-title {
+            text-align: center; 
+            color: #d8caff; 
+            text-shadow: 0 0 15px rgba(138, 43, 226, 0.6);
+            margin-bottom: 10px;
+            font-size: 2.5em;
         }
 
-        .app-container {
-            width: 750px;
-            height: 520px;
-            background-color: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-            display: flex;
-            flex-direction: column;
+        .global-gpa {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5), inset 0 0 20px rgba(72, 61, 139, 0.4);
+            backdrop-filter: blur(5px);
         }
 
-        /* Titlebar */
-        .title-bar {
-            background-color: #2b2b2b;
-            padding: 6px 12px;
+        .global-gpa h2 { color: #00ffff; text-shadow: 0 0 10px rgba(0, 255, 255, 0.4); font-size: 2em; }
+
+        .btn { 
+            padding: 10px 15px; 
+            border: none; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9em;
+        }
+        
+        .btn-add-sem { 
+            background: linear-gradient(45deg, #483d8b, #2f4f4f); 
+            color: #fff; 
+            width: 100%; 
+            font-size: 1.1em; 
+            margin-bottom: 30px; 
+            box-shadow: 0 4px 10px rgba(72, 61, 139, 0.5);
+        }
+        .btn-add-sem:hover { background: linear-gradient(45deg, #5a4baf, #3b6363); transform: translateY(-2px); }
+        
+        .btn-add-sub { background: rgba(72, 61, 139, 0.6); color: #fff; border: 1px solid #7b68ee; margin-top: 15px;}
+        .btn-add-sub:hover { background: rgba(72, 61, 139, 0.9); }
+        
+        .btn-add-eval { background: rgba(0, 206, 209, 0.2); color: #00ffff; border: 1px solid #00ffff; margin-bottom: 15px; }
+        .btn-add-eval:hover { background: rgba(0, 206, 209, 0.4); }
+        
+        .btn-danger { background: rgba(220, 20, 60, 0.6); color: #fff; padding: 6px 10px; border: 1px solid #dc143c; }
+        .btn-danger:hover { background: rgba(220, 20, 60, 0.9); box-shadow: 0 0 10px rgba(220, 20, 60, 0.5); }
+
+        input {
+            font-family: 'Quicksand', sans-serif;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid #483d8b;
+            color: #e0e6ed;
+            border-radius: 6px;
+            padding: 8px;
+            transition: border 0.3s;
+        }
+        input:focus { outline: none; border-color: #00ffff; box-shadow: 0 0 8px rgba(0, 255, 255, 0.3); }
+
+        /* Estilos de Semestre */
+        .semester-block {
+            background: rgba(15, 15, 30, 0.7);
+            border-left: 4px solid #7b68ee;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+        }
+        
+        .semester-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            color: var(--text-bright);
-            font-weight: 600;
+            border-bottom: 1px solid rgba(123, 104, 238, 0.3);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .semester-header input {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #b39ddb;
+            background: transparent;
+            border: none;
+            width: 50%;
+        }
+        .semester-header input:focus { border-bottom: 1px solid #00ffff; }
+
+        .semester-gpa {
+            font-size: 1.2em;
+            color: #40e0d0;
+            text-shadow: 0 0 5px rgba(64, 224, 208, 0.4);
         }
 
-        .title-bar .window-controls span {
-            margin-left: 8px;
-            cursor: pointer;
-            color: var(--text-color);
-        }
-
-        .title-bar .window-controls span:hover {
-            color: var(--text-bright);
-        }
-
-        /* Tabs Navigation */
-        .tabs {
-            display: flex;
-            background-color: #323232;
-            border-bottom: 1px solid var(--border-color);
-            padding: 0 8px;
-        }
-
-        .tab {
-            padding: 8px 16px;
-            cursor: pointer;
-            color: var(--text-color);
-            border: 1px solid transparent;
-            border-bottom: none;
-            margin-right: 2px;
-            border-top-left-radius: 3px;
-            border-top-right-radius: 3px;
-        }
-
-        .tab.active {
-            background-color: var(--panel-bg);
-            color: var(--text-bright);
-            border-color: var(--border-color);
-            border-bottom-color: var(--panel-bg);
-            margin-bottom: -1px;
-        }
-
-        .tab:hover:not(.active) {
-            background-color: #383838;
-            color: var(--text-bright);
-        }
-
-        /* Tab Content Area */
-        .tab-content {
-            flex: 1;
-            padding: 15px;
-            display: none;
-            flex-direction: column;
-            gap: 12px;
-            overflow-y: auto;
-        }
-
-        .tab-content.active {
-            display: flex;
-        }
-
-        /* Form Controls & Layout */
-        fieldset {
-            border: 1px solid var(--border-color);
-            border-radius: 3px;
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        legend {
-            color: var(--text-bright);
-            padding: 0 5px;
-            font-weight: 600;
-        }
-
-        .form-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        label {
-            flex: 0 0 110px;
-            color: var(--text-bright);
-        }
-
-        input[type="text"] {
-            flex: 1;
-            background-color: #2b2b2b;
-            border: 1px solid var(--border-color);
-            color: var(--text-bright);
-            padding: 4px 8px;
-            border-radius: 2px;
-        }
-
-        button {
-            background-color: #4c5052;
-            color: var(--text-bright);
-            border: 1px solid var(--border-color);
-            padding: 4px 12px;
-            border-radius: 2px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #5a5d5f;
-        }
-
-        button.primary {
-            background-color: var(--accent-color);
-            border-color: #357abd;
-        }
-
-        button.primary:hover {
-            background-color: var(--accent-hover);
-        }
-
-        .checkbox-group {
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .checkbox-group label {
-            flex: unset;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-        }
-
-        /* Console Output */
-        .console-box {
-            flex: 1;
-            background-color: var(--console-bg);
-            border: 1px solid var(--border-color);
-            color: var(--console-text);
-            font-family: 'Courier New', Courier, monospace;
-            padding: 8px;
-            overflow-y: auto;
-            border-radius: 2px;
-            font-size: 12px;
-            line-height: 1.4;
-        }
-
-        /* Progress Bar */
-        .progress-container {
-            background-color: #2b2b2b;
-            border: 1px solid var(--border-color);
-            height: 18px;
-            border-radius: 2px;
+        /* Estilos de Materia */
+        .subject-card { 
+            background: rgba(255, 255, 255, 0.03); 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            border-radius: 10px; 
+            border: 1px solid rgba(255, 255, 255, 0.05);
             position: relative;
             overflow: hidden;
         }
-
-        .progress-bar {
-            height: 100%;
-            background-color: var(--accent-color);
-            width: 0%;
-            transition: width 0.2s ease;
+        
+        .subject-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 15px; 
         }
-
-        .progress-text {
-            position: absolute;
+        
+        .subject-header input { 
+            font-size: 1.2em; 
+            font-weight: 600; 
+            width: 60%; 
+            border: none;
+            background: transparent;
+            color: #fff;
+        }
+        .subject-header input:focus { border-bottom: 1px solid #7b68ee; }
+        
+        .eval-row { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 10px; 
+            align-items: center; 
+            flex-wrap: wrap;
+        }
+        .eval-row input { flex: 1; min-width: 100px; }
+        
+        /* Barra de progreso estética */
+        .progress-container {
             width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: var(--text-bright);
-            font-size: 11px;
-            font-weight: bold;
-            mix-blend-mode: difference;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            height: 12px;
+            margin-top: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(123, 104, 238, 0.3);
         }
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #7b68ee, #00ffff);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+            transition: width 0.4s ease, background 0.4s ease;
+        }
+        .progress-fill.over { background: linear-gradient(90deg, #ff4500, #dc143c); box-shadow: 0 0 10px rgba(220, 20, 60, 0.5); }
+        .progress-fill.complete { background: linear-gradient(90deg, #32cd32, #00fa9a); box-shadow: 0 0 10px rgba(0, 250, 154, 0.5); }
 
-        /* Footer Actions */
-        .app-footer {
-            padding: 10px 15px;
-            background-color: #323232;
-            border-top: 1px solid var(--border-color);
+        .summary { 
+            margin-top: 15px; 
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            font-size: 1.05em; 
+            color: #a9a9a9;
         }
+        
+        .grade-good { color: #00fa9a; text-shadow: 0 0 5px rgba(0, 250, 154, 0.4); }
+        .grade-warning { color: #ffd700; }
+        .grade-danger { color: #ff4500; }
 
-        .status-text {
-            color: var(--text-color);
+        @media (max-width: 700px) {
+            .eval-row { flex-direction: column; align-items: stretch; }
+            .semester-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .semester-header input { width: 100%; }
+            .summary { flex-direction: column; gap: 8px; }
         }
     </style>
 </head>
 <body>
-
-    <div class="app-container">
-        <!-- Title Bar -->
-        <div class="title-bar">
-            <span>Nougat32 Utility v1.0.4</span>
-            <div class="window-controls">
-                <span>&minus;</span>
-                <span>&#x25a1;</span>
-                <span>&times;</span>
-            </div>
+    <div class="container">
+        <h1 class="header-title">🌙 Grader Estelar ✨</h1>
+        
+        <div class="global-gpa">
+            <h3>Promedio General Acumulado</h3>
+            <h2 id="globalGpaDisplay">0.00 / 20</h2>
         </div>
 
-        <!-- Navigation Tabs -->
-        <div class="tabs">
-            <div class="tab active" onclick="switchTab(event, 'tab-download')">Download / Flash</div>
-            <div class="tab" onclick="switchTab(event, 'tab-options')">Options</div>
-            <div class="tab" onclick="switchTab(event, 'tab-logs')">Log Console</div>
-            <div class="tab" onclick="switchTab(event, 'tab-about')">About</div>
-        </div>
-
-        <!-- Tab 1: Download / Flash -->
-        <div id="tab-download" class="tab-content active">
-            <fieldset>
-                <legend>Firmware Configuration</legend>
-                <div class="form-row">
-                    <label>Scatter Loading:</label>
-                    <input type="text" id="txtScatter" placeholder="Select scatter file (*.txt)..." readonly>
-                    <button onclick="browseFile('txtScatter')">Browse</button>
-                </div>
-                <div class="form-row">
-                    <label>Preloader:</label>
-                    <input type="text" id="txtPreloader" placeholder="Select preloader binary..." readonly>
-                    <button onclick="browseFile('txtPreloader')">Browse</button>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <legend>Execution Parameters</legend>
-                <div class="checkbox-group">
-                    <label><input type="checkbox" id="chkDA" checked> DA DL All With Check Sum</label>
-                    <label><input type="checkbox" id="chkFormat"> Format All + Download</label>
-                </div>
-            </fieldset>
-
-            <fieldset style="flex: 1;">
-                <legend>Process Status</legend>
-                <div class="progress-container">
-                    <div id="progressBar" class="progress-bar"></div>
-                    <div id="progressText" class="progress-text">0%</div>
-                </div>
-            </fieldset>
-        </div>
-
-        <!-- Tab 2: Options -->
-        <div id="tab-options" class="tab-content">
-            <fieldset>
-                <legend>Connection Options</legend>
-                <div class="form-row">
-                    <label>UART Baudrate:</label>
-                    <input type="text" value="921600">
-                </div>
-                <div class="form-row">
-                    <label>COM Port:</label>
-                    <input type="text" value="COM3 (Auto-detect)">
-                </div>
-            </fieldset>
-            <fieldset>
-                <legend>Behavior</legend>
-                <div class="checkbox-group" style="flex-direction: column; align-items: flex-start;">
-                    <label><input type="checkbox" checked> Enable Battery Low Warning</label>
-                    <label><input type="checkbox" checked> Auto-scroll Console Logs</label>
-                    <label><input type="checkbox"> Dump Flash on Error</label>
-                </div>
-            </fieldset>
-        </div>
-
-        <!-- Tab 3: Log Console -->
-        <div id="tab-logs" class="tab-content">
-            <div id="consoleLog" class="console-box">[INFO] Nougat32 initialized successfully.<br>[INFO] Waiting for device connection...</div>
-        </div>
-
-        <!-- Tab 4: About -->
-        <div id="tab-about" class="tab-content">
-            <fieldset style="text-align: center; padding: 20px;">
-                <legend>About Nougat32</legend>
-                <h3 style="color: var(--text-bright); margin-bottom: 10px;">Nougat32 Firmware Tool</h3>
-                <p>Version 1.0.4 (Built for x64 architecture)</p>
-                <p style="margin-top: 10px; color: var(--text-color);">A professional utility interface designed for managing data processes and device flashing sequences.</p>
-            </fieldset>
-        </div>
-
-        <!-- Footer Actions -->
-        <div class="app-footer">
-            <span id="statusLabel" class="status-text">Ready</span>
-            <div>
-                <button class="primary" onclick="startProcess()">Download</button>
-                <button onclick="stopProcess()">Stop</button>
-            </div>
-        </div>
+        <button class="btn btn-add-sem" onclick="addSemester()">+ Nuevo Semestre Cósmico</button>
+        <div id="semestersContainer"></div>
     </div>
 
     <script>
-        function switchTab(evt, tabId) {
-            const contents = document.querySelectorAll('.tab-content');
-            contents.forEach(c => c.classList.remove('active'));
+        // Estructura anidada: Semestres -> Materias -> Evaluaciones
+        let graderData = JSON.parse(localStorage.getItem('lunaGrader_Data')) || [
+            {
+                id: Date.now(),
+                name: 'Semestre 1',
+                subjects: [
+                    {
+                        id: Date.now() + 1,
+                        name: 'Introducción a las telecomunicaciones',
+                        evals: []
+                    }
+                ]
+            }
+        ];
 
-            const tabs = document.querySelectorAll('.tab');
-            tabs.forEach(t => t.classList.remove('active'));
-
-            document.getElementById(tabId).classList.add('active');
-            evt.currentTarget.classList.add('active');
+        function saveData() {
+            localStorage.setItem('lunaGrader_Data', JSON.stringify(graderData));
+            render();
         }
 
-        function browseFile(inputId) {
-            const input = document.getElementById(inputId);
-            // Simulating file browse dialog selection
-            const sampleFiles = {
-                'txtScatter': 'C:/Firmware/MT6737_Android_scatter.txt',
-                'txtPreloader': 'C:/Firmware/preloader_mt6737.bin'
-            };
-            input.value = sampleFiles[inputId] || 'C:/Firmware/selected_file.bin';
-            logMessage(`[FILE] Loaded: ${input.value}`);
+        // --- CRUD SEMESTRES ---
+        function addSemester() {
+            graderData.push({ id: Date.now(), name: 'Nuevo Semestre', subjects: [] });
+            saveData();
         }
 
-        function logMessage(msg) {
-            const consoleBox = document.getElementById('consoleLog');
-            consoleBox.innerHTML += `<br>${msg}`;
-            consoleBox.scrollTop = consoleBox.scrollHeight;
+        function deleteSemester(semId) {
+            if(confirm("🌙 ¿Deseas desvanecer este semestre y todas sus estrellas (materias)?")) {
+                graderData = graderData.filter(s => s.id !== semId);
+                saveData();
+            }
         }
 
-        let progressInterval;
-        function startProcess() {
-            const scatter = document.getElementById('txtScatter').value;
-            if (!scatter) {
-                alert('Please select a scatter file first.');
-                return;
+        function updateSemesterName(semId, newName) {
+            const sem = graderData.find(s => s.id === semId);
+            if(sem) sem.name = newName;
+            saveData();
+        }
+
+        // --- CRUD MATERIAS ---
+        function addSubject(semId) {
+            const sem = graderData.find(s => s.id === semId);
+            if(sem) {
+                sem.subjects.push({ id: Date.now(), name: 'Nueva Materia', evals: [] });
+                saveData();
+            }
+        }
+
+        function deleteSubject(semId, subId) {
+            if(confirm("✨ ¿Seguro que deseas eliminar esta materia?")) {
+                const sem = graderData.find(s => s.id === semId);
+                if(sem) sem.subjects = sem.subjects.filter(sub => sub.id !== subId);
+                saveData();
+            }
+        }
+
+        function updateSubjectName(semId, subId, newName) {
+            const sem = graderData.find(s => s.id === semId);
+            if(sem) {
+                const sub = sem.subjects.find(s => s.id === subId);
+                if(sub) sub.name = newName;
+            }
+            saveData();
+        }
+
+        // --- CRUD EVALUACIONES ---
+        function addEval(semId, subId) {
+            const sem = graderData.find(s => s.id === semId);
+            if(sem) {
+                const sub = sem.subjects.find(s => s.id === subId);
+                if(sub) sub.evals.push({ id: Date.now(), name: 'Evaluación', weight: 0, grade: 0 });
+            }
+            saveData();
+        }
+
+        function updateEval(semId, subId, evalId, field, value) {
+            const sem = graderData.find(s => s.id === semId);
+            if(sem) {
+                const sub = sem.subjects.find(s => s.id === subId);
+                if(sub) {
+                    const ev = sub.evals.find(e => e.id === evalId);
+                    if(ev) ev[field] = field === 'name' ? value : parseFloat(value) || 0;
+                }
+            }
+            saveData();
+        }
+
+        function deleteEval(semId, subId, evalId) {
+            const sem = graderData.find(s => s.id === semId);
+            if(sem) {
+                const sub = sem.subjects.find(s => s.id === subId);
+                if(sub) sub.evals = sub.evals.filter(e => e.id !== evalId);
+            }
+            saveData();
+        }
+
+        // --- RENDERIZADO Y CÁLCULOS ---
+        function render() {
+            const container = document.getElementById('semestersContainer');
+            container.innerHTML = '';
+
+            let globalTotalGrades = 0;
+            let globalSubjectCount = 0;
+
+            if (graderData.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#7b68ee;">El cielo nocturno está vacío. Agrega un semestre para comenzar.</p>';
             }
 
-            let progress = 0;
-            const bar = document.getElementById('progressBar');
-            const text = document.getElementById('progressText');
-            const status = document.getElementById('statusLabel');
+            graderData.forEach(sem => {
+                const semBlock = document.createElement('div');
+                semBlock.className = 'semester-block';
+                
+                let semTotalGrades = 0;
+                let semSubjectCount = sem.subjects.length;
 
-            status.textContent = 'Flashing...';
-            logMessage('[PROCESS] Starting download procedure...');
+                let subjectsHtml = '';
 
-            clearInterval(progressInterval);
-            progressInterval = setInterval(() => {
-                if (progress < 100) {
-                    progress += 5;
-                    bar.style.width = progress + '%';
-                    text.textContent = progress + '%';
-                    if (progress === 30) logMessage('[INFO] Sending DA to target...');
-                    if (progress === 70) logMessage('[INFO] Flashing ROM regions...');
-                } else {
-                    clearInterval(progressInterval);
-                    status.textContent = 'Download OK';
-                    logMessage('[SUCCESS] Firmware upgrade completed successfully!');
-                }
-            }, 150);
+                sem.subjects.forEach(sub => {
+                    let totalGrade = 0;
+                    let totalWeight = 0;
+
+                    let evalsHtml = sub.evals.map(ev => {
+                        let calcGrade = (ev.grade * (ev.weight / 100));
+                        totalGrade += calcGrade;
+                        totalWeight += ev.weight;
+                        
+                        return `
+                            <div class="eval-row">
+                                <input type="text" value="${ev.name}" onchange="updateEval(${sem.id}, ${sub.id}, ${ev.id}, 'name', this.value)">
+                                <input type="number" value="${ev.weight}" onchange="updateEval(${sem.id}, ${sub.id}, ${ev.id}, 'weight', this.value)" placeholder="Peso %" min="0" max="100">
+                                <input type="number" value="${ev.grade}" onchange="updateEval(${sem.id}, ${sub.id}, ${ev.id}, 'grade', this.value)" placeholder="Nota (0-20)" step="0.1" min="0" max="20">
+                                <button class="btn btn-danger" onclick="deleteEval(${sem.id}, ${sub.id}, ${ev.id})">✖</button>
+                            </div>
+                        `;
+                    }).join('');
+
+                    semTotalGrades += totalGrade;
+                    globalTotalGrades += totalGrade;
+                    globalSubjectCount++;
+
+                    // Logica visual de la barra
+                    let barClass = 'progress-fill';
+                    if (totalWeight > 100) barClass += ' over';
+                    else if (totalWeight === 100) barClass += ' complete';
+                    
+                    let gradeClass = totalGrade >= 9.5 ? 'grade-good' : (totalGrade >= 5 ? 'grade-warning' : 'grade-danger');
+
+                    subjectsHtml += `
+                        <div class="subject-card">
+                            <div class="subject-header">
+                                <input type="text" value="${sub.name}" onchange="updateSubjectName(${sem.id}, ${sub.id}, this.value)">
+                                <button class="btn btn-danger" onclick="deleteSubject(${sem.id}, ${sub.id})">Eliminar Materia</button>
+                            </div>
+                            <button class="btn btn-add-eval" onclick="addEval(${sem.id}, ${sub.id})">+ Añadir Evaluación</button>
+                            
+                            <div class="evals-container">
+                                ${evalsHtml}
+                            </div>
+                            
+                            <div class="progress-container" title="Porcentaje evaluado: ${totalWeight.toFixed(1)}%">
+                                <div class="${barClass}" style="width: ${Math.min(totalWeight, 100)}%;"></div>
+                            </div>
+                            
+                            <div class="summary">
+                                <span>Progreso: <span style="color: ${totalWeight > 100 ? '#ff4500' : '#fff'}">${totalWeight.toFixed(1)}% / 100%</span></span>
+                                <span>Nota Acumulada: <strong class="${gradeClass}">${totalGrade.toFixed(2)} / 20</strong></span>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Calculo del promedio del semestre (suma de definitivas / cant de materias)
+                let semGpa = semSubjectCount > 0 ? (semTotalGrades / semSubjectCount) : 0;
+
+                semBlock.innerHTML = `
+                    <div class="semester-header">
+                        <input type="text" value="${sem.name}" onchange="updateSemesterName(${sem.id}, this.value)">
+                        <div class="semester-gpa">Promedio Semestre: <strong>${semGpa.toFixed(2)}</strong></div>
+                        <button class="btn btn-danger" onclick="deleteSemester(${sem.id})">Eliminar Semestre</button>
+                    </div>
+                    ${subjectsHtml}
+                    <button class="btn btn-add-sub" onclick="addSubject(${sem.id})">+ Agregar Materia a este Semestre</button>
+                `;
+                container.appendChild(semBlock);
+            });
+
+            // Calculo del promedio global general
+            let globalGpa = globalSubjectCount > 0 ? (globalTotalGrades / globalSubjectCount) : 0;
+            document.getElementById('globalGpaDisplay').innerText = `${globalGpa.toFixed(2)} / 20`;
         }
 
-        function stopProcess() {
-            clearInterval(progressInterval);
-            document.getElementById('progressBar').style.width = '0%';
-            document.getElementById('progressText').textContent = '0%';
-            document.getElementById('statusLabel').textContent = 'Stopped';
-            logMessage('[WARNING] Process aborted by user.');
-        }
+        // Render inicial
+        render();
     </script>
 </body>
 </html>
