@@ -3,190 +3,418 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro Académico</title>
+    <title>Nougat32 - Firmware & Utility Tool</title>
     <style>
-        body {
-            display: flex;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            height: 100vh;
+        :root {
+            --bg-color: #2b2b2b;
+            --panel-bg: #3c3f41;
+            --border-color: #555555;
+            --text-color: #a9b7c6;
+            --text-bright: #ffffff;
+            --accent-color: #4a90e2;
+            --accent-hover: #357abd;
+            --danger-color: #d9534f;
+            --console-bg: #1e1e1e;
+            --console-text: #00ff66;
         }
 
-        .sidebar {
-            width: 250px;
-            background-color: #2c3e50;
-            padding: 20px 0;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 13px;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .app-container {
+            width: 750px;
+            height: 520px;
+            background-color: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
         }
 
-        .nav-btn {
-            background: none;
-            color: white;
-            border: none;
-            padding: 15px 20px;
-            text-align: left;
+        /* Titlebar */
+        .title-bar {
+            background-color: #2b2b2b;
+            padding: 6px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-bright);
+            font-weight: 600;
+        }
+
+        .title-bar .window-controls span {
+            margin-left: 8px;
             cursor: pointer;
-            font-size: 16px;
+            color: var(--text-color);
         }
 
-        .nav-btn:hover {
-            background-color: #34495e;
+        .title-bar .window-controls span:hover {
+            color: var(--text-bright);
         }
 
-        .main-content {
-            flex-grow: 1;
-            padding: 30px;
+        /* Tabs Navigation */
+        .tabs {
+            display: flex;
+            background-color: #323232;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0 8px;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            cursor: pointer;
+            color: var(--text-color);
+            border: 1px solid transparent;
+            border-bottom: none;
+            margin-right: 2px;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+        }
+
+        .tab.active {
+            background-color: var(--panel-bg);
+            color: var(--text-bright);
+            border-color: var(--border-color);
+            border-bottom-color: var(--panel-bg);
+            margin-bottom: -1px;
+        }
+
+        .tab:hover:not(.active) {
+            background-color: #383838;
+            color: var(--text-bright);
+        }
+
+        /* Tab Content Area */
+        .tab-content {
+            flex: 1;
+            padding: 15px;
+            display: none;
+            flex-direction: column;
+            gap: 12px;
+            overflow-y: auto;
+        }
+
+        .tab-content.active {
+            display: flex;
+        }
+
+        /* Form Controls & Layout */
+        fieldset {
+            border: 1px solid var(--border-color);
+            border-radius: 3px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        legend {
+            color: var(--text-bright);
+            padding: 0 5px;
+            font-weight: 600;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        label {
+            flex: 0 0 110px;
+            color: var(--text-bright);
+        }
+
+        input[type="text"] {
+            flex: 1;
+            background-color: #2b2b2b;
+            border: 1px solid var(--border-color);
+            color: var(--text-bright);
+            padding: 4px 8px;
+            border-radius: 2px;
+        }
+
+        button {
+            background-color: #4c5052;
+            color: var(--text-bright);
+            border: 1px solid var(--border-color);
+            padding: 4px 12px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #5a5d5f;
+        }
+
+        button.primary {
+            background-color: var(--accent-color);
+            border-color: #357abd;
+        }
+
+        button.primary:hover {
+            background-color: var(--accent-hover);
+        }
+
+        .checkbox-group {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .checkbox-group label {
+            flex: unset;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        /* Console Output */
+        .console-box {
+            flex: 1;
+            background-color: var(--console-bg);
+            border: 1px solid var(--border-color);
+            color: var(--console-text);
+            font-family: 'Courier New', Courier, monospace;
+            padding: 8px;
+            overflow-y: auto;
+            border-radius: 2px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background-color: #2b2b2b;
+            border: 1px solid var(--border-color);
+            height: 18px;
+            border-radius: 2px;
             position: relative;
-            background-color: #ecf0f1;
+            overflow: hidden;
         }
 
-        /* Lógica de Pestañas */
-        .pestana {
-            display: none; /* Oculta todas las pestañas por defecto */
+        .progress-bar {
+            height: 100%;
+            background-color: var(--accent-color);
+            width: 0%;
+            transition: width 0.2s ease;
         }
 
-        .pestana.active {
-            display: block; /* Muestra solo la pestaña activa */
-        }
-
-        /* Botón Flotante (+) */
-        .fab-btn {
+        .progress-text {
             position: absolute;
-            bottom: 30px;
-            right: 30px;
-            width: 60px;
-            height: 60px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            font-size: 30px;
-            cursor: pointer;
-            box-shadow: 0px 4px 6px rgba(0,0,0,0.3);
-        }
-
-        .fab-btn:hover {
-            background-color: #2980b9;
-        }
-
-        /* Modal (Fondo oscuro y caja central) */
-        .modal {
-            display: none; 
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-bright);
+            font-size: 11px;
+            font-weight: bold;
+            mix-blend-mode: difference;
         }
 
-        .modal-content {
-            background-color: white;
-            margin: 15% auto;
-            padding: 20px;
-            border-radius: 8px;
-            width: 300px;
-            text-align: center;
-            position: relative;
+        /* Footer Actions */
+        .app-footer {
+            padding: 10px 15px;
+            background-color: #323232;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .close-btn {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .opcion-btn {
-            display: block;
-            width: 100%;
-            margin: 10px 0;
-            padding: 10px;
-            background-color: #ecf0f1;
-            border: 1px solid #bdc3c7;
-            cursor: pointer;
+        .status-text {
+            color: var(--text-color);
         }
     </style>
 </head>
 <body>
 
-    <!-- Menú Lateral -->
-    <div class="sidebar">
-        <button class="nav-btn" onclick="cambiarPestana('registro-academico')">Registro Académico</button>
-        <button class="nav-btn" onclick="cambiarPestana('resumen')">Resumen</button>
-        <button class="nav-btn" onclick="cambiarPestana('configuracion')">Configuración</button>
-    </div>
-
-    <!-- Área de Contenido -->
-    <div class="main-content">
-        
-        <!-- Pestaña: Registro Académico -->
-        <div id="registro-academico" class="pestana active">
-            <h2>Registro Académico</h2>
-            <p>Aquí se visualizarán tus semestres y materias...</p>
+    <div class="app-container">
+        <!-- Title Bar -->
+        <div class="title-bar">
+            <span>Nougat32 Utility v1.0.4</span>
+            <div class="window-controls">
+                <span>&minus;</span>
+                <span>&#x25a1;</span>
+                <span>&times;</span>
+            </div>
         </div>
 
-        <!-- Pestaña: Resumen -->
-        <div id="resumen" class="pestana">
-            <h2>Resumen</h2>
-            <p>Aquí verás tus promedios e historial...</p>
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab(event, 'tab-download')">Download / Flash</div>
+            <div class="tab" onclick="switchTab(event, 'tab-options')">Options</div>
+            <div class="tab" onclick="switchTab(event, 'tab-logs')">Log Console</div>
+            <div class="tab" onclick="switchTab(event, 'tab-about')">About</div>
         </div>
 
-        <!-- Pestaña: Configuración -->
-        <div id="configuracion" class="pestana">
-            <h2>Configuración</h2>
-            <p>Opciones de la cuenta y la página...</p>
+        <!-- Tab 1: Download / Flash -->
+        <div id="tab-download" class="tab-content active">
+            <fieldset>
+                <legend>Firmware Configuration</legend>
+                <div class="form-row">
+                    <label>Scatter Loading:</label>
+                    <input type="text" id="txtScatter" placeholder="Select scatter file (*.txt)..." readonly>
+                    <button onclick="browseFile('txtScatter')">Browse</button>
+                </div>
+                <div class="form-row">
+                    <label>Preloader:</label>
+                    <input type="text" id="txtPreloader" placeholder="Select preloader binary..." readonly>
+                    <button onclick="browseFile('txtPreloader')">Browse</button>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend>Execution Parameters</legend>
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="chkDA" checked> DA DL All With Check Sum</label>
+                    <label><input type="checkbox" id="chkFormat"> Format All + Download</label>
+                </div>
+            </fieldset>
+
+            <fieldset style="flex: 1;">
+                <legend>Process Status</legend>
+                <div class="progress-container">
+                    <div id="progressBar" class="progress-bar"></div>
+                    <div id="progressText" class="progress-text">0%</div>
+                </div>
+            </fieldset>
         </div>
 
-        <!-- Botón flotante de suma (+) -->
-        <button class="fab-btn" onclick="abrirModal()">+</button>
-    </div>
+        <!-- Tab 2: Options -->
+        <div id="tab-options" class="tab-content">
+            <fieldset>
+                <legend>Connection Options</legend>
+                <div class="form-row">
+                    <label>UART Baudrate:</label>
+                    <input type="text" value="921600">
+                </div>
+                <div class="form-row">
+                    <label>COM Port:</label>
+                    <input type="text" value="COM3 (Auto-detect)">
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>Behavior</legend>
+                <div class="checkbox-group" style="flex-direction: column; align-items: flex-start;">
+                    <label><input type="checkbox" checked> Enable Battery Low Warning</label>
+                    <label><input type="checkbox" checked> Auto-scroll Console Logs</label>
+                    <label><input type="checkbox"> Dump Flash on Error</label>
+                </div>
+            </fieldset>
+        </div>
 
-    <!-- Modal para agregar registros (Oculto por defecto) -->
-    <div id="modal-agregar" class="modal">
-        <div class="modal-content">
-            <span class="close-btn" onclick="cerrarModal()">&times;</span>
-            <h3>¿Qué deseas agregar?</h3>
-            <button class="opcion-btn">Agregar Semestre</button>
-            <button class="opcion-btn">Agregar Materia</button>
-            <button class="opcion-btn">Agregar Evaluación</button>
+        <!-- Tab 3: Log Console -->
+        <div id="tab-logs" class="tab-content">
+            <div id="consoleLog" class="console-box">[INFO] Nougat32 initialized successfully.<br>[INFO] Waiting for device connection...</div>
+        </div>
+
+        <!-- Tab 4: About -->
+        <div id="tab-about" class="tab-content">
+            <fieldset style="text-align: center; padding: 20px;">
+                <legend>About Nougat32</legend>
+                <h3 style="color: var(--text-bright); margin-bottom: 10px;">Nougat32 Firmware Tool</h3>
+                <p>Version 1.0.4 (Built for x64 architecture)</p>
+                <p style="margin-top: 10px; color: var(--text-color);">A professional utility interface designed for managing data processes and device flashing sequences.</p>
+            </fieldset>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="app-footer">
+            <span id="statusLabel" class="status-text">Ready</span>
+            <div>
+                <button class="primary" onclick="startProcess()">Download</button>
+                <button onclick="stopProcess()">Stop</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Función para cambiar el contenido principal desde el menú izquierdo
-        function cambiarPestana(idPestana) {
-            // 1. Ocultar todas las pestañas
-            let pestanas = document.querySelectorAll('.pestana');
-            pestanas.forEach(function(pestana) {
-                pestana.classList.remove('active');
-            });
+        function switchTab(evt, tabId) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(c => c.classList.remove('active'));
 
-            // 2. Mostrar la pestaña seleccionada
-            let pestanaActiva = document.getElementById(idPestana);
-            if (pestanaActiva) {
-                pestanaActiva.classList.add('active');
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(t => t.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        function browseFile(inputId) {
+            const input = document.getElementById(inputId);
+            // Simulating file browse dialog selection
+            const sampleFiles = {
+                'txtScatter': 'C:/Firmware/MT6737_Android_scatter.txt',
+                'txtPreloader': 'C:/Firmware/preloader_mt6737.bin'
+            };
+            input.value = sampleFiles[inputId] || 'C:/Firmware/selected_file.bin';
+            logMessage(`[FILE] Loaded: ${input.value}`);
+        }
+
+        function logMessage(msg) {
+            const consoleBox = document.getElementById('consoleLog');
+            consoleBox.innerHTML += `<br>${msg}`;
+            consoleBox.scrollTop = consoleBox.scrollHeight;
+        }
+
+        let progressInterval;
+        function startProcess() {
+            const scatter = document.getElementById('txtScatter').value;
+            if (!scatter) {
+                alert('Please select a scatter file first.');
+                return;
             }
+
+            let progress = 0;
+            const bar = document.getElementById('progressBar');
+            const text = document.getElementById('progressText');
+            const status = document.getElementById('statusLabel');
+
+            status.textContent = 'Flashing...';
+            logMessage('[PROCESS] Starting download procedure...');
+
+            clearInterval(progressInterval);
+            progressInterval = setInterval(() => {
+                if (progress < 100) {
+                    progress += 5;
+                    bar.style.width = progress + '%';
+                    text.textContent = progress + '%';
+                    if (progress === 30) logMessage('[INFO] Sending DA to target...');
+                    if (progress === 70) logMessage('[INFO] Flashing ROM regions...');
+                } else {
+                    clearInterval(progressInterval);
+                    status.textContent = 'Download OK';
+                    logMessage('[SUCCESS] Firmware upgrade completed successfully!');
+                }
+            }, 150);
         }
 
-        // Funciones para el Modal del botón de suma (+)
-        function abrirModal() {
-            document.getElementById('modal-agregar').style.display = 'block';
-        }
-
-        function cerrarModal() {
-            document.getElementById('modal-agregar').style.display = 'none';
-        }
-
-        // Cerrar el modal si el usuario hace clic fuera de la caja blanca
-        window.onclick = function(event) {
-            let modal = document.getElementById('modal-agregar');
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
+        function stopProcess() {
+            clearInterval(progressInterval);
+            document.getElementById('progressBar').style.width = '0%';
+            document.getElementById('progressText').textContent = '0%';
+            document.getElementById('statusLabel').textContent = 'Stopped';
+            logMessage('[WARNING] Process aborted by user.');
         }
     </script>
 </body>
