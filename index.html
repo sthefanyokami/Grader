@@ -46,12 +46,10 @@
 
         .global-gpa h2 { color: #00ffff; text-shadow: 0 0 10px rgba(0, 255, 255, 0.4); font-size: 2em; }
 
-        /* Barra de acciones generales (Guardar/Abrir/Nuevo) */
         .actions-bar {
             display: flex;
             gap: 10px;
             margin-bottom: 20px;
-            flex-wrap: wrap;
         }
 
         .btn { 
@@ -75,13 +73,6 @@
         }
         .btn-add-sem:hover { background: linear-gradient(45deg, #5a4baf, #3b6363); transform: translateY(-2px); }
 
-        .btn-file {
-            background: rgba(72, 61, 139, 0.4);
-            color: #b39ddb;
-            border: 1px solid #7b68ee;
-        }
-        .btn-file:hover { background: rgba(72, 61, 139, 0.8); color: #fff; }
-        
         .btn-add-sub { background: rgba(72, 61, 139, 0.6); color: #fff; border: 1px solid #7b68ee; margin-top: 15px; width: 100%;}
         .btn-add-sub:hover { background: rgba(72, 61, 139, 0.9); }
         
@@ -91,41 +82,17 @@
         .btn-danger { background: rgba(220, 20, 60, 0.6); color: #fff; padding: 6px 10px; border: 1px solid #dc143c; }
         .btn-danger:hover { background: rgba(220, 20, 60, 0.9); box-shadow: 0 0 10px rgba(220, 20, 60, 0.5); }
 
-        /* Pestañas de Semestres */
-        .semester-tabs-container {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            margin-bottom: 20px;
-            padding-bottom: 5px;
-            border-bottom: 1px solid rgba(123, 104, 238, 0.3);
-        }
-
-        .semester-tab {
-            background: rgba(15, 15, 30, 0.5);
-            border: 1px solid rgba(123, 104, 238, 0.3);
-            color: #a9a9a9;
-            padding: 10px 20px;
-            border-radius: 8px 8px 0 0;
+        .btn-toggle {
+            background: transparent;
+            border: 1px solid #7b68ee;
+            color: #b39ddb;
+            padding: 6px 12px;
+            border-radius: 6px;
             cursor: pointer;
-            font-family: 'Cinzel', serif;
-            font-weight: bold;
-            white-space: nowrap;
-            transition: all 0.3s;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
         }
-
-        .semester-tab:hover {
-            background: rgba(123, 104, 238, 0.2);
-            color: #fff;
-        }
-
-        .semester-tab.active {
-            background: rgba(15, 15, 30, 0.9);
-            border-color: #7b68ee;
-            border-bottom: 2px solid #00ffff;
-            color: #00ffff;
-            box-shadow: 0 -4px 10px rgba(0, 255, 255, 0.1);
-        }
+        .btn-toggle:hover { background: rgba(123, 104, 238, 0.2); color: #fff; }
 
         input {
             font-family: 'Quicksand', sans-serif;
@@ -138,48 +105,69 @@
         }
         input:focus { outline: none; border-color: #00ffff; box-shadow: 0 0 8px rgba(0, 255, 255, 0.3); }
 
-        /* Estilos de Semestre Activo */
+        /* Contenedor de Semestres (Estilo Acordeón / Pestañas Desplegables) */
+        .semesters-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
         .semester-block {
             background: rgba(15, 15, 30, 0.8);
             border: 1px solid #7b68ee;
             border-radius: 12px;
-            padding: 20px;
+            overflow: hidden;
             box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            transition: all 0.3s ease;
         }
         
         .semester-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 15px 20px;
+            background: rgba(72, 61, 139, 0.2);
             border-bottom: 1px solid rgba(123, 104, 238, 0.3);
-            padding-bottom: 15px;
-            margin-bottom: 20px;
             flex-wrap: wrap;
             gap: 15px;
         }
         
         .semester-header input {
             font-family: 'Cinzel', serif;
-            font-size: 1.5em;
+            font-size: 1.3em;
             font-weight: bold;
             color: #b39ddb;
             background: transparent;
             border: none;
-            width: 50%;
+            width: 40%;
         }
         .semester-header input:focus { border-bottom: 1px solid #00ffff; background: rgba(0,0,0,0.2); }
 
         .semester-info-box {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             align-items: center;
             flex-wrap: wrap;
         }
 
         .semester-gpa {
-            font-size: 1.1em;
+            font-size: 1em;
             color: #40e0d0;
             text-shadow: 0 0 5px rgba(64, 224, 208, 0.4);
+        }
+
+        .semester-content {
+            padding: 20px;
+            display: none; /* Por defecto cerrado */
+        }
+
+        .semester-block.open .semester-content {
+            display: block; /* Se abre al hacer toggle */
+        }
+
+        .semester-block.open .semester-header {
+            border-bottom: 1px solid #7b68ee;
+            background: rgba(72, 61, 139, 0.4);
         }
 
         /* Estilos de Materia */
@@ -189,7 +177,6 @@
             margin-bottom: 20px; 
             border-radius: 10px; 
             border: 1px solid rgba(255, 255, 255, 0.05);
-            position: relative;
         }
         
         .subject-header { 
@@ -218,7 +205,6 @@
         }
         .eval-row input { flex: 1; min-width: 100px; }
         
-        /* Barra de progreso estética */
         .progress-container {
             width: 100%;
             background: rgba(0, 0, 0, 0.5);
@@ -233,7 +219,7 @@
             border-radius: 10px;
             background: linear-gradient(90deg, #7b68ee, #00ffff);
             box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
-            transition: width 0.4s ease, background 0.4s ease;
+            transition: width 0.4s ease;
         }
         .progress-fill.over { background: linear-gradient(90deg, #ff4500, #dc143c); box-shadow: 0 0 10px rgba(220, 20, 60, 0.5); }
         .progress-fill.complete { background: linear-gradient(90deg, #32cd32, #00fa9a); box-shadow: 0 0 10px rgba(0, 250, 154, 0.5); }
@@ -257,7 +243,6 @@
             .semester-header { flex-direction: column; align-items: flex-start; gap: 10px; }
             .semester-header input { width: 100%; }
             .summary { flex-direction: column; gap: 8px; }
-            .actions-bar { flex-direction: column; }
         }
     </style>
 </head>
@@ -270,19 +255,11 @@
             <h2 id="globalGpaDisplay">0.00 / 20</h2>
         </div>
 
-        <!-- Barra de Acciones de Semestres y Archivos -->
         <div class="actions-bar">
             <button class="btn btn-add-sem" onclick="addSemester()">+ Nuevo Semestre Cósmico</button>
-            <button class="btn btn-file" onclick="saveToFile()">💾 Guardar Datos</button>
-            <button class="btn btn-file" onclick="document.getElementById('fileInput').click()">📂 Abrir Datos</button>
-            <input type="file" id="fileInput" style="display: none;" accept=".json" onchange="loadFromFile(event)">
         </div>
 
-        <!-- Pestañas de Semestres -->
-        <div id="semesterTabsContainer" class="semester-tabs-container"></div>
-
-        <!-- Contenedor del Semestre Activo -->
-        <div id="semestersContainer"></div>
+        <div id="semestersContainer" class="semesters-list"></div>
     </div>
 
     <script>
@@ -290,6 +267,7 @@
             {
                 id: Date.now(),
                 name: 'Semestre 1',
+                isOpen: true,
                 subjects: [
                     {
                         id: Date.now() + 1,
@@ -300,61 +278,34 @@
             }
         ];
 
-        let activeSemesterId = graderData.length > 0 ? graderData[0].id : null;
-
         function saveData() {
             localStorage.setItem('lunaGrader_Data', JSON.stringify(graderData));
             render();
         }
 
-        // --- FUNCIONES DE GUARDAR Y ABRIR ARCHIVO ---
-        function saveToFile() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(graderData, null, 2));
-            const downloadAnchor = document.createElement('a');
-            downloadAnchor.setAttribute("href", dataStr);
-            downloadAnchor.setAttribute("download", "grader_estelar_ucab.json");
-            document.body.appendChild(downloadAnchor);
-            downloadAnchor.click();
-            downloadAnchor.remove();
-        }
-
-        function loadFromFile(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const parsedData = JSON.parse(e.target.result);
-                    if (Array.isArray(parsedData)) {
-                        graderData = parsedData;
-                        activeSemesterId = graderData.length > 0 ? graderData[0].id : null;
-                        saveData();
-                        alert("✨ ¡Semestres cargados con éxito desde el archivo!");
-                    } else {
-                        alert("⚠️ El archivo no tiene un formato válido.");
-                    }
-                } catch (err) {
-                    alert("❌ Error al leer el archivo JSON.");
-                }
-            };
-            reader.readAsText(file);
-            event.target.value = ''; // Reset input
+        function toggleSemester(semId) {
+            const sem = graderData.find(s => s.id === semId);
+            if(sem) {
+                sem.isOpen = !sem.isOpen;
+                saveData();
+            }
         }
 
         // --- CRUD SEMESTRES ---
         function addSemester() {
-            const newSem = { id: Date.now(), name: `Semestre ${graderData.length + 1}`, subjects: [] };
+            const newSem = { 
+                id: Date.now(), 
+                name: `Semestre ${graderData.length + 1}`, 
+                isOpen: true, 
+                subjects: [] 
+            };
             graderData.push(newSem);
-            activeSemesterId = newSem.id;
             saveData();
         }
 
         function deleteSemester(semId) {
-            if(confirm("🌙 ¿Deseas desvanecer este semestre y todas sus estrellas (materias)?")) {
+            if(confirm("🌙 ¿Deseas desvanecer este semestre y todas sus materias?")) {
                 graderData = graderData.filter(s => s.id !== semId);
-                if (activeSemesterId === semId) {
-                    activeSemesterId = graderData.length > 0 ? graderData[0].id : null;
-                }
                 saveData();
             }
         }
@@ -424,40 +375,18 @@
 
         // --- RENDERIZADO Y CÁLCULOS ---
         function render() {
-            const tabsContainer = document.getElementById('semesterTabsContainer');
             const container = document.getElementById('semestersContainer');
-            
-            tabsContainer.innerHTML = '';
             container.innerHTML = '';
 
             let globalTotalGrades = 0;
             let globalSubjectCount = 0;
 
             if (graderData.length === 0) {
-                tabsContainer.innerHTML = '';
                 container.innerHTML = '<p style="text-align:center; color:#7b68ee;">El cielo nocturno está vacío. Agrega un semestre para comenzar.</p>';
                 document.getElementById('globalGpaDisplay').innerText = `0.00 / 20`;
                 return;
             }
 
-            // Asegurar que activeSemesterId sea válido
-            if (!graderData.some(s => s.id === activeSemesterId)) {
-                activeSemesterId = graderData[0].id;
-            }
-
-            // Renderizar pestañas de semestres
-            graderData.forEach(sem => {
-                const tab = document.createElement('div');
-                tab.className = `semester-tab ${sem.id === activeSemesterId ? 'active' : ''}`;
-                tab.innerText = sem.name || 'Sin Nombre';
-                tab.onclick = () => {
-                    activeSemesterId = sem.id;
-                    render();
-                };
-                tabsContainer.appendChild(tab);
-            });
-
-            // Calcular promedio general global en base a todas las materias de todos los semestres
             graderData.forEach(sem => {
                 sem.subjects.forEach(sub => {
                     let totalGrade = sub.evals.reduce((acc, ev) => acc + (ev.grade * (ev.weight / 100)), 0);
@@ -466,20 +395,18 @@
                 });
             });
 
-            // Renderizar contenido del semestre activo
-            const activeSem = graderData.find(s => s.id === activeSemesterId);
-            if (activeSem) {
+            graderData.forEach(sem => {
                 const semBlock = document.createElement('div');
-                semBlock.className = 'semester-block';
+                semBlock.className = `semester-block ${sem.isOpen ? 'open' : ''}`;
                 
                 let semTotalGrades = 0;
-                let semSubjectCount = activeSem.subjects.length;
+                let semSubjectCount = sem.subjects.length;
                 let semTotalWeightEvaluated = 0;
                 let semRemainingWeightTotal = 0;
 
                 let subjectsHtml = '';
 
-                activeSem.subjects.forEach(sub => {
+                sem.subjects.forEach(sub => {
                     let totalGrade = 0;
                     let totalWeight = 0;
 
@@ -490,10 +417,10 @@
                         
                         return `
                             <div class="eval-row">
-                                <input type="text" value="${ev.name}" onchange="updateEval(${activeSem.id}, ${sub.id}, ${ev.id}, 'name', this.value)">
-                                <input type="number" value="${ev.weight}" onchange="updateEval(${activeSem.id}, ${sub.id}, ${ev.id}, 'weight', this.value)" placeholder="Peso %" min="0" max="100">
-                                <input type="number" value="${ev.grade}" onchange="updateEval(${activeSem.id}, ${sub.id}, ${ev.id}, 'grade', this.value)" placeholder="Nota (0-20)" step="0.1" min="0" max="20">
-                                <button class="btn btn-danger" onclick="deleteEval(${activeSem.id}, ${sub.id}, ${ev.id})">✖</button>
+                                <input type="text" value="${ev.name}" onchange="updateEval(${sem.id}, ${sub.id}, ${ev.id}, 'name', this.value)">
+                                <input type="number" value="${ev.weight}" onchange="updateEval(${sem.id}, ${sub.id}, ${ev.id}, 'weight', this.value)" placeholder="Peso %" min="0" max="100">
+                                <input type="number" value="${ev.grade}" onchange="updateEval(${sem.id}, ${sub.id}, ${ev.id}, 'grade', this.value)" placeholder="Nota (0-20)" step="0.1" min="0" max="20">
+                                <button class="btn btn-danger" onclick="deleteEval(${sem.id}, ${sub.id}, ${ev.id})">✖</button>
                             </div>
                         `;
                     }).join('');
@@ -513,10 +440,10 @@
                     subjectsHtml += `
                         <div class="subject-card">
                             <div class="subject-header">
-                                <input type="text" value="${sub.name}" onchange="updateSubjectName(${activeSem.id}, ${sub.id}, this.value)">
-                                <button class="btn btn-danger" onclick="deleteSubject(${activeSem.id}, ${sub.id})">Eliminar Materia</button>
+                                <input type="text" value="${sub.name}" onchange="updateSubjectName(${sem.id}, ${sub.id}, this.value)">
+                                <button class="btn btn-danger" onclick="deleteSubject(${sem.id}, ${sub.id})">Eliminar Materia</button>
                             </div>
-                            <button class="btn btn-add-eval" onclick="addEval(${activeSem.id}, ${sub.id})">+ Añadir Evaluación</button>
+                            <button class="btn btn-add-eval" onclick="addEval(${sem.id}, ${sub.id})">+ Añadir Evaluación</button>
                             
                             <div class="evals-container">
                                 ${evalsHtml}
@@ -540,24 +467,26 @@
 
                 semBlock.innerHTML = `
                     <div class="semester-header">
-                        <input type="text" value="${activeSem.name}" onchange="updateSemesterName(${activeSem.id}, this.value)">
+                        <input type="text" value="${sem.name}" onchange="updateSemesterName(${sem.id}, this.value)">
                         <div class="semester-info-box">
-                            <div class="semester-gpa">Promedio Semestre: <strong>${semGpa.toFixed(2)}</strong></div>
-                            <div class="semester-gpa" style="color: #00ffff; font-size: 0.95em;" title="Promedio de puntos restantes por evaluar por materia">Faltante Promedio: <strong>${avgRemaining.toFixed(1)}%</strong></div>
+                            <div class="semester-gpa">Promedio: <strong>${semGpa.toFixed(2)}</strong></div>
+                            <div class="semester-gpa" style="color: #00ffff;" title="Faltante promedio por materia">Faltante: <strong>${avgRemaining.toFixed(1)}%</strong></div>
+                            <button class="btn-toggle" onclick="toggleSemester(${sem.id})">${sem.isOpen ? '▲ Cerrar' : '▼ Abrir'}</button>
                         </div>
-                        <button class="btn btn-danger" onclick="deleteSemester(${activeSem.id})">Eliminar Semestre</button>
+                        <button class="btn btn-danger" onclick="deleteSemester(${sem.id})">Eliminar Semestre</button>
                     </div>
-                    ${subjectsHtml}
-                    <button class="btn btn-add-sub" onclick="addSubject(${activeSem.id})">+ Agregar Materia a este Semestre</button>
+                    <div class="semester-content">
+                        ${subjectsHtml}
+                        <button class="btn btn-add-sub" onclick="addSubject(${sem.id})">+ Agregar Materia a este Semestre</button>
+                    </div>
                 `;
                 container.appendChild(semBlock);
-            }
+            });
 
             let globalGpa = globalSubjectCount > 0 ? (globalTotalGrades / globalSubjectCount) : 0;
             document.getElementById('globalGpaDisplay').innerText = `${globalGpa.toFixed(2)} / 20`;
         }
 
-        // Render inicial
         render();
     </script>
 </body>
