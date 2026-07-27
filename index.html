@@ -3,224 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nougat32 - Interfaz de Gestión</title>
+    <title>Registro Académico</title>
     <style>
-        :root {
-            --bg-color: #1e1e1e;
-            --panel-bg: #2d2d2d;
-            --border-color: #404040;
-            --text-color: #d4d4d4;
-            --accent-green: #2e7d32;
-            --accent-red: #c62828;
-            --input-bg: #3c3c3c;
-        }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            display: flex;
+            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 20px;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #2c3e50;
+            padding: 20px 0;
             display: flex;
             flex-direction: column;
-            height: 95vh;
-            box-sizing: border-box;
         }
-        h2 { margin-top: 0; font-size: 1.2rem; color: #fff; }
-        .container {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            flex: 1;
-        }
-        .tabs {
-            display: flex;
-            gap: 5px;
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 5px;
-        }
-        .tab-btn {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-color);
-            padding: 8px 16px;
-            cursor: pointer;
-            border-radius: 4px 4px 0 0;
-        }
-        .tab-btn.active {
-            background: var(--input-bg);
-            border-bottom: 2px solid #007acc;
-            font-weight: bold;
-        }
-        .panel {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            padding: 15px;
-            border-radius: 4px;
-        }
-        .file-row {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            align-items: center;
-        }
-        .file-row label {
-            width: 140px;
-            font-size: 0.9rem;
-        }
-        .file-row input[type="text"] {
-            flex: 1;
-            background: var(--input-bg);
-            border: 1px solid var(--border-color);
-            color: #fff;
-            padding: 6px;
-            border-radius: 3px;
-        }
-        .file-row button {
-            background: #444;
-            border: 1px solid var(--border-color);
-            color: #fff;
-            padding: 6px 12px;
-            cursor: pointer;
-            border-radius: 3px;
-        }
-        .checkbox-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 10px;
-        }
-        .checkbox-grid label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-        }
-        .progress-container {
-            background: var(--input-bg);
-            border-radius: 4px;
-            overflow: hidden;
-            height: 20px;
-            border: 1px solid var(--border-color);
-        }
-        .progress-bar {
-            background: #007acc;
-            height: 100%;
-            width: 0%;
-            transition: width 0.3s;
-        }
-        .console {
-            background: #111;
-            border: 1px solid var(--border-color);
-            color: #4af626;
-            font-family: monospace;
-            padding: 10px;
-            height: 120px;
-            overflow-y: auto;
-            border-radius: 4px;
-            font-size: 0.85rem;
-        }
-        .actions {
-            display: flex;
-            gap: 10px;
-            justify-content: flex-start;
-        }
-        .btn-action {
-            padding: 8px 20px;
-            font-weight: bold;
+
+        .nav-btn {
+            background: none;
+            color: white;
             border: none;
-            border-radius: 4px;
+            padding: 15px 20px;
+            text-align: left;
             cursor: pointer;
-            color: #fff;
+            font-size: 16px;
         }
-        .btn-start { background-color: var(--accent-green); }
-        .btn-stop { background-color: var(--accent-red); }
-        .btn-exit { background-color: #555; margin-left: auto; }
+
+        .nav-btn:hover {
+            background-color: #34495e;
+        }
+
+        .main-content {
+            flex-grow: 1;
+            padding: 30px;
+            position: relative;
+            background-color: #ecf0f1;
+        }
+
+        /* Lógica de Pestañas */
+        .pestana {
+            display: none; /* Oculta todas las pestañas por defecto */
+        }
+
+        .pestana.active {
+            display: block; /* Muestra solo la pestaña activa */
+        }
+
+        /* Botón Flotante (+) */
+        .fab-btn {
+            position: absolute;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 30px;
+            cursor: pointer;
+            box-shadow: 0px 4px 6px rgba(0,0,0,0.3);
+        }
+
+        .fab-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Modal (Fondo oscuro y caja central) */
+        .modal {
+            display: none; 
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 300px;
+            text-align: center;
+            position: relative;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .opcion-btn {
+            display: block;
+            width: 100%;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #ecf0f1;
+            border: 1px solid #bdc3c7;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Nougat32 - Interfaz de Gestión</h2>
-    
-    <!-- Pestañas de Navegación -->
-    <div class="tabs">
-        <button class="tab-btn active">Download / Process</button>
-        <button class="tab-btn">Configuration</button>
+    <!-- Menú Lateral -->
+    <div class="sidebar">
+        <button class="nav-btn" onclick="cambiarPestana('registro-academico')">Registro Académico</button>
+        <button class="nav-btn" onclick="cambiarPestana('resumen')">Resumen</button>
+        <button class="nav-btn" onclick="cambiarPestana('configuracion')">Configuración</button>
     </div>
 
-    <!-- Panel de Selección de Archivos -->
-    <div class="panel">
-        <div class="file-row">
-            <label>Download Agent:</label>
-            <input type="text" placeholder="Seleccionar archivo .bin o .da...">
-            <button>Browse...</button>
+    <!-- Área de Contenido -->
+    <div class="main-content">
+        
+        <!-- Pestaña: Registro Académico -->
+        <div id="registro-academico" class="pestana active">
+            <h2>Registro Académico</h2>
+            <p>Aquí se visualizarán tus semestres y materias...</p>
         </div>
-        <div class="file-row">
-            <label>Scatter / Config:</label>
-            <input type="text" placeholder="Seleccionar archivo scatter...">
-            <button>Browse...</button>
+
+        <!-- Pestaña: Resumen -->
+        <div id="resumen" class="pestana">
+            <h2>Resumen</h2>
+            <p>Aquí verás tus promedios e historial...</p>
         </div>
-        <div class="file-row">
-            <label>Binary Data File:</label>
-            <input type="text" placeholder="Seleccionar archivo de datos...">
-            <button>Browse...</button>
+
+        <!-- Pestaña: Configuración -->
+        <div id="configuracion" class="pestana">
+            <h2>Configuración</h2>
+            <p>Opciones de la cuenta y la página...</p>
+        </div>
+
+        <!-- Botón flotante de suma (+) -->
+        <button class="fab-btn" onclick="abrirModal()">+</button>
+    </div>
+
+    <!-- Modal para agregar registros (Oculto por defecto) -->
+    <div id="modal-agregar" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="cerrarModal()">&times;</span>
+            <h3>¿Qué deseas agregar?</h3>
+            <button class="opcion-btn">Agregar Semestre</button>
+            <button class="opcion-btn">Agregar Materia</button>
+            <button class="opcion-btn">Agregar Evaluación</button>
         </div>
     </div>
 
-    <!-- Panel de Opciones -->
-    <div class="panel">
-        <strong>Opciones de Ejecución</strong>
-        <div class="checkbox-grid">
-            <label><input type="checkbox"> PRELOADER</label>
-            <label><input type="checkbox"> DSP_BL</label>
-            <label><input type="checkbox"> NVRAM</label>
-            <label><input type="checkbox"> LK</label>
-            <label><input type="checkbox"> BOOTIMG</label>
-            <label><input type="checkbox"> RECOVERY</label>
-        </div>
-    </div>
+    <script>
+        // Función para cambiar el contenido principal desde el menú izquierdo
+        function cambiarPestana(idPestana) {
+            // 1. Ocultar todas las pestañas
+            let pestanas = document.querySelectorAll('.pestana');
+            pestanas.forEach(function(pestana) {
+                pestana.classList.remove('active');
+            });
 
-    <!-- Barra de Progreso Global -->
-    <div class="progress-container">
-        <div class="progress-bar" id="progressBar"></div>
-    </div>
+            // 2. Mostrar la pestaña seleccionada
+            let pestanaActiva = document.getElementById(idPestana);
+            if (pestanaActiva) {
+                pestanaActiva.classList.add('active');
+            }
+        }
 
-    <!-- Consola de Logs -->
-    <div class="console" id="consoleLog">
-        [Sistema] Esperando conexión de dispositivo...<br>
-        [Sistema] Interfaz cargada correctamente en HTML/CSS/JS.
-    </div>
+        // Funciones para el Modal del botón de suma (+)
+        function abrirModal() {
+            document.getElementById('modal-agregar').style.display = 'block';
+        }
 
-    <!-- Botonera de Acciones -->
-    <div class="actions">
-        <button class="btn-action btn-start" onclick="startProcess()">Start Process</button>
-        <button class="btn-action btn-stop" onclick="stopProcess()">Stop</button>
-        <button class="btn-action btn-exit">Exit</button>
-    </div>
-</div>
+        function cerrarModal() {
+            document.getElementById('modal-agregar').style.display = 'none';
+        }
 
-<script>
-    function startProcess() {
-        const consoleLog = document.getElementById('consoleLog');
-        const progressBar = document.getElementById('progressBar');
-        consoleLog.innerHTML += "<br>[Proceso] Iniciando carga de paquetes y verificación...";
-        progressBar.style.width = '40%';
-        setTimeout(() => {
-            progressBar.style.width = '100%';
-            consoleLog.innerHTML += "<br>[Éxito] Proceso completado correctamente.";
-            consoleLog.scrollTop = consoleLog.scrollHeight;
-        }, 1500);
-    }
-
-    function stopProcess() {
-        const consoleLog = document.getElementById('consoleLog');
-        const progressBar = document.getElementById('progressBar');
-        progressBar.style.width = '0%';
-        consoleLog.innerHTML += "<br>[Advertencia] Proceso detenido por el usuario.";
-        consoleLog.scrollTop = consoleLog.scrollHeight;
-    }
-</script>
-
+        // Cerrar el modal si el usuario hace clic fuera de la caja blanca
+        window.onclick = function(event) {
+            let modal = document.getElementById('modal-agregar');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 </body>
 </html>
